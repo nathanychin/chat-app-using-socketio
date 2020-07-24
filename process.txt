@@ -1,0 +1,33 @@
+io.on('connect',...) allows all processes to happen when user connects
+socket.emit('message', 'Welcome to chat') sends to all users using message event
+socket.on('message',...) in client side catches message from message event in server side
+socket.on('message', message => {
+  outputMessage(message);
+});  call a method that displays message in DOM
+
+// Output message to DOM
+function outputMessage(message){
+  const div = document.createElement('div');
+
+  // Attach class name 'message' to new div
+  div.classList.add('message');
+
+  // HTML inside div message - add {message} to p
+  div.innerHTML = `<p class="meta">Brad <span>9:12pm</span></p>
+  <p class="text">
+    ${message}
+  </p>`;
+
+  // Finds chat-messages container div - add new div element to container
+  document.querySelector('.chat-messages').appendChild(div);
+  
+}
+-------------------------------------------------------------------------------------------------------
+For textbox submit form to send messages the user types to DOM,
+chatForm.addEventlistener('submit',...) listens for a submit action. Anything typed in that form 
+is saved as const msg = e.target.elements.msg.value;
+socket.emit('chatMessage', msg); sends message to user and server in event called chatMessage
+socket.on('chatMessage', msg => {io.emit('message', msg) }); in server listens to chatMessage event
+and broadcasts (io.emit) with message event and msg value back to client side. Client catches event
+by socket.on('message') and calls outputMessage method with msg being used as a param named message
+outputMessage inserts payload into DOM
